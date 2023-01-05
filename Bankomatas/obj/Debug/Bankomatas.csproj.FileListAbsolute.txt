@@ -1,0 +1,8 @@
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\bin\Debug\Bankomatas.exe.config
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\bin\Debug\Bankomatas.exe
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\bin\Debug\Bankomatas.pdb
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\obj\Debug\Bankomatas.csproj.AssemblyReference.cache
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\obj\Debug\Bankomatas.csproj.SuggestedBindingRedirects.cache
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\obj\Debug\Bankomatas.csproj.CoreCompileInputs.cache
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\obj\Debug\Bankomatas.exe
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\obj\Debug\Bankomatas.pdb
