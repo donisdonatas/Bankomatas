@@ -47,7 +47,7 @@ namespace Bankomatas
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("3 kartus blogai įvestas slaptažodis.");
                         Console.WriteLine("Kortelė užblokuota");
-                        Thread.Sleep(2000);
+                        Thread.Sleep(3000);
                         Environment.Exit(0);
                     }
                     Console.ForegroundColor = ConsoleColor.Red;

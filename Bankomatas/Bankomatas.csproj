@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\Login.cs" />
     <Compile Include="System\PIN.cs" />
+    <Compile Include="System\SQLite.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
