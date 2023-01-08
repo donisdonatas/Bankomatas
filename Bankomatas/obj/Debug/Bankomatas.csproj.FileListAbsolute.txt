@@ -14,3 +14,4 @@ H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savaran
 H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\bin\Debug\EntityFramework.SqlServer.xml
 H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\bin\Debug\System.Data.SQLite.xml
 H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\obj\Debug\Bankomatas.csproj.CopyComplete
+H:\Shared drives\MG donisdonatas@gmail.com\Code Academy\Paskaitos\dotNET\Savarankiskas darbas - Bankomatas\Bankomatas\Bankomatas\obj\Debug\Bankomatas.csproj.AssemblyReference.cache

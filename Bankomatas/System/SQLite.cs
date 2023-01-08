@@ -11,10 +11,13 @@ namespace Bankomatas.System
     public static class SQLite
     {
         internal static string GuidTableName = "GuidTable";
+        internal static string ClientsAccounts = "ClientsAccounts";
         internal static string NewGuidString = Guid.NewGuid().ToString();
+
         public static SQLiteConnection CreateConnection()
         {
             SQLiteConnection SQLiteConn = new SQLiteConnection("Data Source = bankomatas.db; Version = 3; New = True; Compress = True;");
+            Console.WriteLine("SQLiteConnection state: " + SQLiteConn.State);
             try
             {
                 SQLiteConn.Open();
@@ -31,13 +34,31 @@ namespace Bankomatas.System
             return SQLiteConn;
         }
 
-        public static void CreteGuidTable(SQLiteConnection conn)
+        public static void CreateGuidTable(SQLiteConnection conn)
         {
             SQLiteCommand SQLiteComm;
-            string SQLiteCreate = $"CREATE TABLE {GuidTableName}(GUID String(36));";
+            string SQLiteCreate = $"CREATE TABLE {GuidTableName}(GUID CHARACTER(36));";
             SQLiteComm = conn.CreateCommand();
             SQLiteComm.CommandText = SQLiteCreate;
             SQLiteComm.ExecuteNonQuery();
+        }
+
+        public static void CreateClientsAccountsTable(SQLiteConnection conn)
+        {
+            SQLiteCommand SQLiteComm;
+            string SQLiteCreate = $"CREATE TABLE {ClientsAccounts}(ClientID INTEGER PRIMARY KEY AUTOINCREMENT, GUID CHARACTER(36), CardID CHARACTER(4), CardBalance DECIMAL(10, 2));";
+            SQLiteComm = conn.CreateCommand();
+            SQLiteComm.CommandText = SQLiteCreate;
+            SQLiteComm.ExecuteNonQuery();
+        }
+
+        public static void InsertDataToClientsAccountsTable(SQLiteConnection connection)
+        {
+            SQLiteCommand SQLiteComm;
+            SQLiteComm = connection.CreateCommand();
+            SQLiteComm.CommandText = $"INSERT INTO {ClientsAccounts}(GUID, CardID, CardBalance) VALUES ('{NewGuidString}', 1234, 5412.54)";
+            SQLiteComm.ExecuteNonQuery();
+            connection.Close();
         }
 
         public static void InsertData(SQLiteConnection conn)
@@ -62,6 +83,39 @@ namespace Bankomatas.System
             }
 
             conn.Close();   //Kodėl čia pavyzdyje uždaromas konnectionas? Gal reiktų jį įkelti į Try-Finish bloką
+        }
+
+        public static string GetGuid(SQLiteConnection conn)
+        {
+            SQLiteDataReader SQLiteReader;
+            SQLiteCommand sqliteCommand;
+            sqliteCommand = conn.CreateCommand();
+            sqliteCommand.CommandText = $"SELECT GUID FROM {GuidTableName} WHERE GUID='d47f53e6-65b6-463e-8fbd-054c17390818';";
+            SQLiteReader = sqliteCommand.ExecuteReader();
+            string GuidString = null;
+            while (SQLiteReader.Read())
+            {
+                GuidString = SQLiteReader.GetString(0);
+            }
+            Console.WriteLine($"GuidString from DB: {GuidString}");
+            conn.Close();
+            return GuidString;
+        }
+        public static string GetPin(SQLiteConnection conn)
+        {
+            SQLiteDataReader SQLiteReader;
+            SQLiteCommand sqliteCommand;
+            sqliteCommand = conn.CreateCommand();
+            sqliteCommand.CommandText = $"SELECT CardID FROM {ClientsAccounts} WHERE GUID='0b7fff40-d4b9-4adf-a6f7-18eabdb033d5';";
+            SQLiteReader = sqliteCommand.ExecuteReader();
+            string PinFromDatabase = null;
+            while (SQLiteReader.Read())
+            {
+                PinFromDatabase = SQLiteReader.GetString(0);
+            }
+            Console.WriteLine($"PinFromDatabase from DB: {PinFromDatabase}");
+            conn.Close();
+            return PinFromDatabase;
         }
     }
 }

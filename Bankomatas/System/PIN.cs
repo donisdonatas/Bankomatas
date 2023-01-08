@@ -43,5 +43,31 @@ namespace Bankomatas.System
             Console.WriteLine();
             return PIN;
         }
+
+        public static char EncryptPIN(char c, int salt)
+        {
+            {
+                int PinDigit;
+                //if (shiftRight)
+                //{
+                PinDigit = (int)c + salt;
+                if (PinDigit > (int)'z')
+                {
+                    PinDigit -= (int)'z';
+                }
+                //}
+                //else
+                //{
+                //    rIndex = (int)c - salt;
+                //    if (rIndex < (int)'a')
+                //    {
+                //        rIndex = rIndex + (int)'z';
+                //    }
+                //}
+
+                char r = (char)PinDigit;
+                return r;
+            }
+        }
     }
 }

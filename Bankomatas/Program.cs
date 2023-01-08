@@ -14,16 +14,17 @@ namespace Bankomatas
     {
         static void Main()
         {
-
-            SQLiteConnection sqliteConnection;
-            sqliteConnection = SQLite.CreateConnection();
-            SQLite.CreteGuidTable(sqliteConnection);
-            SQLite.InsertData(sqliteConnection);
-            SQLite.ReadData(sqliteConnection);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("d47f53e6-65b6-463e-8fbd-054c17390818");
+            //SQLiteConnection sqliteConnection;
+            //sqliteConnection = SQLite.CreateConnection();
+            //SQLite.CreateClientsAccountsTable(sqliteConnection);
+            //SQLite.InsertDataToClientsAccountsTable(sqliteConnection);
+            //SQLite.ReadData(sqliteConnection);
 
             Menu.PrimaryMenu();
-
-
+            Login.LoginAnimation();
+            Menu.LoggedUserMenu();
 
 
             Console.ReadLine();
