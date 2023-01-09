@@ -10,14 +10,17 @@ namespace Bankomatas.System
 {
     public static class SQLite
     {
-        internal static string GuidTableName = "GuidTable";
-        internal static string ClientsAccounts = "ClientsAccounts";
+        public static string GuidTableName = "GuidTable";
+        public static string GuidTable = "Guid";
+        public static string ClientsAccounts = "ClientsAccounts";
+        public static string ClientsInfo = "ClientsInfo";
+        public static string TransactionTypes = "TransactionTypes";
+        public static string ClientsTransactions = "ClientsTransactions";
         internal static string NewGuidString = Guid.NewGuid().ToString();
 
         public static SQLiteConnection CreateConnection()
         {
             SQLiteConnection SQLiteConn = new SQLiteConnection("Data Source = bankomatas.db; Version = 3; New = True; Compress = True;");
-            Console.WriteLine("SQLiteConnection state: " + SQLiteConn.State);
             try
             {
                 SQLiteConn.Open();
@@ -116,6 +119,18 @@ namespace Bankomatas.System
             Console.WriteLine($"PinFromDatabase from DB: {PinFromDatabase}");
             conn.Close();
             return PinFromDatabase;
+        }
+
+        public static SQLiteDataReader GetFullColumn(string tableName, string columnName)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                SQLiteDataReader SQLiteReader;
+                SQLCommand.CommandText = $"SELECT {columnName} FROM {tableName};";
+                SQLiteReader = SQLCommand.ExecuteReader();
+                return SQLiteReader;
+            }
         }
     }
 }

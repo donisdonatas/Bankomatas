@@ -14,8 +14,21 @@ namespace Bankomatas
     {
         static void Main()
         {
+            
+            DefaultDatabase.CreateTransactionsTypesTable();
+            DefaultDatabase.CreateGuidTable();
+            DefaultDatabase.CreateClientsInfoTable();
+            DefaultDatabase.CreateClientsAccountsTable();
+            DefaultDatabase.CreateClientsTransactionsTable();
+
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("d47f53e6-65b6-463e-8fbd-054c17390818");
+            SQLiteDataReader Guids = SQLite.GetFullColumn(SQLite.GuidTable, "GUID");
+            string GuidString;
+            while (Guids.Read())
+            {
+                GuidString = Guids.GetString(0);
+                Console.WriteLine(GuidString);
+            }
             //SQLiteConnection sqliteConnection;
             //sqliteConnection = SQLite.CreateConnection();
             //SQLite.CreateClientsAccountsTable(sqliteConnection);

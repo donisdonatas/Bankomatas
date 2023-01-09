@@ -44,27 +44,25 @@ namespace Bankomatas.System
             return PIN;
         }
 
+        public static string GeneratePin()
+        {
+            string Pin = "";
+            for(var i = 0; i < 4; i++)
+            {
+                Pin += RandomDigit.GetRandom().ToString();
+            }
+            return Pin;
+        }
+
         public static char EncryptPIN(char c, int salt)
         {
             {
                 int PinDigit;
-                //if (shiftRight)
-                //{
                 PinDigit = (int)c + salt;
                 if (PinDigit > (int)'z')
                 {
                     PinDigit -= (int)'z';
                 }
-                //}
-                //else
-                //{
-                //    rIndex = (int)c - salt;
-                //    if (rIndex < (int)'a')
-                //    {
-                //        rIndex = rIndex + (int)'z';
-                //    }
-                //}
-
                 char r = (char)PinDigit;
                 return r;
             }
