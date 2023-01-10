@@ -13,6 +13,12 @@ namespace Bankomatas.Classes
 {
     public class Card
     {
+        private string _cardGuid;
+        public string CardGuid
+        {
+            get{ return _cardGuid; } 
+            set { _cardGuid = value; }
+        }
         private bool isCardValid = false;
         private bool isPinValid = false;
         private string Pin;
@@ -25,17 +31,19 @@ namespace Bankomatas.Classes
                 Console.WriteLine("Įdėkite kortelę:");
                 Console.ForegroundColor = ConsoleColor.White;
                 string Card = Console.ReadLine();
-                SQLiteConnection sqliteConnection = SQLite.CreateConnection();
-                string dbGuid = SQLite.GetGuid(sqliteConnection);
-                if(Card == dbGuid)
+                List<string> Guids = SQLite.GetFullColumn(SQLite.GuidTable, "GUID");
+                foreach (string guid in Guids)
                 {
-                    isCardValid = true;
+                    if(Card == guid)
+                    {
+                        CardGuid = guid;
+                        isCardValid = Card == guid;
+                    }
                 }
-                else
+                if(!isCardValid)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Įdėta netinkama kortelė.");
-                    isCardValid = false;
                 }
             } while (!isCardValid);
             return isCardValid;
@@ -45,6 +53,10 @@ namespace Bankomatas.Classes
         {
             do
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                string getEncodedPinFromSQL = SQLite.GetPin(CardGuid);
+                string pin = Encode.DecodedToString(getEncodedPinFromSQL);
+                Console.WriteLine(getEncodedPinFromSQL + " / " + pin);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Įveskite keturių skaitmenų PIN kodą:");
                 Pin = PIN.InputPIN();
@@ -53,9 +65,8 @@ namespace Bankomatas.Classes
                 Console.WriteLine("EncodedPin: " + EncodedPin);
                 string DecodedPin = Encode.DecodedToString(EncodedPin);
                 Console.WriteLine("DecodedPin: " + DecodedPin);
-                SQLiteConnection sqliteConnection = SQLite.CreateConnection();
-                string PinFromDataBase = SQLite.GetPin(sqliteConnection);
-                if (Pin == PinFromDataBase)
+
+                if (Pin == pin)
                 {
                     isPinValid = true;
                 }

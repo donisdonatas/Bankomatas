@@ -93,7 +93,7 @@ namespace Bankomatas.System
             SQLiteDataReader SQLiteReader;
             SQLiteCommand sqliteCommand;
             sqliteCommand = conn.CreateCommand();
-            sqliteCommand.CommandText = $"SELECT GUID FROM {GuidTableName} WHERE GUID='d47f53e6-65b6-463e-8fbd-054c17390818';";
+            sqliteCommand.CommandText = $"SELECT GUID FROM {GuidTable} WHERE GUID='d47f53e6-65b6-463e-8fbd-054c17390818';";
             SQLiteReader = sqliteCommand.ExecuteReader();
             string GuidString = null;
             while (SQLiteReader.Read())
@@ -104,6 +104,7 @@ namespace Bankomatas.System
             conn.Close();
             return GuidString;
         }
+
         public static string GetPin(SQLiteConnection conn)
         {
             SQLiteDataReader SQLiteReader;
@@ -121,7 +122,24 @@ namespace Bankomatas.System
             return PinFromDatabase;
         }
 
-        public static SQLiteDataReader GetFullColumn(string tableName, string columnName)
+        public static string GetPin(string guid)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                SQLiteDataReader SQLiteReader;
+                SQLCommand.CommandText = $"SELECT CardPinEncoded FROM {ClientsAccounts} INNER JOIN {GuidTable} ON {ClientsAccounts}.AccountID = {GuidTable}.CardID WHERE {GuidTable}.GUID = '{guid}';";
+                SQLiteReader = SQLCommand.ExecuteReader();
+                string encodedPin = "";
+                while (SQLiteReader.Read())
+                {
+                    encodedPin = SQLiteReader.GetString(0);
+                }
+                return encodedPin;
+            }
+        }
+
+        public static List<string> GetFullColumn(string tableName, string columnName)
         {
             using (SQLiteConnection ConnectionToDatabase = CreateConnection())
             using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
@@ -129,7 +147,12 @@ namespace Bankomatas.System
                 SQLiteDataReader SQLiteReader;
                 SQLCommand.CommandText = $"SELECT {columnName} FROM {tableName};";
                 SQLiteReader = SQLCommand.ExecuteReader();
-                return SQLiteReader;
+                List<string> StringsList = new List<string>();
+                while (SQLiteReader.Read())
+                {
+                    StringsList.Add(SQLiteReader.GetString(0));
+                }
+                return StringsList;
             }
         }
     }

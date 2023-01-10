@@ -22,13 +22,12 @@ namespace Bankomatas
             DefaultDatabase.CreateClientsTransactionsTable();
 
             Console.ForegroundColor = ConsoleColor.Blue;
-            SQLiteDataReader Guids = SQLite.GetFullColumn(SQLite.GuidTable, "GUID");
-            string GuidString;
-            while (Guids.Read())
+            List<string> Guids = SQLite.GetFullColumn(SQLite.GuidTable, "GUID");
+            foreach(string guid in Guids)
             {
-                GuidString = Guids.GetString(0);
-                Console.WriteLine(GuidString);
+                Console.WriteLine(guid);
             }
+
             //SQLiteConnection sqliteConnection;
             //sqliteConnection = SQLite.CreateConnection();
             //SQLite.CreateClientsAccountsTable(sqliteConnection);

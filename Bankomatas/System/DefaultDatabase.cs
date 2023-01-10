@@ -27,18 +27,18 @@ namespace Bankomatas.System
                     SQLCommand.CommandText = $"INSERT INTO {SQLite.TransactionTypes} (" +
                                                             $"TransactionType) " +
                                                             $"VALUES (" +
-                                                                    $"'Deposit');";
+                                                                    $"'income');";
                     SQLCommand.ExecuteNonQuery();
 
                     SQLCommand.CommandText = $"INSERT INTO {SQLite.TransactionTypes} (" +
                                                                     $"TransactionType) " +
                                                                     $"VALUES (" +
-                                                                            $"'Withdrawal');";
+                                                                            $"'expense');";
                     SQLCommand.ExecuteNonQuery();
                     SQLCommand.CommandText = $"INSERT INTO {SQLite.TransactionTypes} (" +
                                                                     $"TransactionType) " +
                                                                     $"VALUES (" +
-                                                                            $"'Transfer');";
+                                                                            $"'transfer');";
                     SQLCommand.ExecuteNonQuery();
                 }
             }
@@ -202,6 +202,70 @@ namespace Bankomatas.System
 
                 if (!isTableExist)
                 {
+                    List<string> SQLCommandsValues = new List<string>() {
+                        "1, '2023-01-04', 2, 'Pinigų išėmimas bankomate', 100.00",
+                        "1, '2023-01-04', 2, 'Pirkimas', 10.46",
+                        "1, '2023-01-05', 2, 'Pirkimas', 9.42",
+                        "1, '2023-01-05', 2, 'Sąskaita', 120.00",
+                        "1, '2023-01-06', 2, 'Pinigų išėmimas bankomate', 50.00",
+                        "1, '2023-01-06', 2, 'Pirkimas internetu', 12.36",
+                        "1, '2023-01-09', 2, 'Pirkimas', 47.59",
+                        "1, '2023-01-09', 2, 'Pirkimas', 27.69",
+                        "1, '2023-01-09', 2, 'Pirkimas', 8.12",
+                        "1, '2023-01-09', 2, 'Pirkimas', 147.00",
+                        "1, '2023-01-09', 2, 'Pirkimas', 241.00",
+                        "1, '2023-01-09', 2, 'Pirkimas', 17.99",
+                        "1, '2023-01-09', 2, 'Pirkimas', 65.00",
+                        "1, '2023-01-10', 1, 'Atlyginimas', 1896.27",
+                        "1, '2023-01-10', 2, 'Pirkimas', 247.15",
+                        "1, '2023-01-10', 2, 'Pirkimas', 100.15",
+                        "2, '2023-01-04', 2, 'Pirkimas', 97.15",
+                        "2, '2023-01-04', 2, 'Pirkimas', 13.56",
+                        "2, '2023-01-05', 2, 'Pirkimas', 87.58",
+                        "2, '2023-01-05', 2, 'Pinigų išėmimas bankomate', 47.99",
+                        "2, '2023-01-05', 1, 'Atlyginimas', 97.15",
+                        "2, '2023-01-07', 2, 'Pinigų išėmimas bankomate', 200.00",
+                        "2, '2023-01-09', 2, 'Pirkimas', 42.17",
+                        "2, '2023-01-09', 2, 'Pirkimas', 56.36",
+                        "2, '2023-01-09', 2, 'Pirkimas', 78.89",
+                        "2, '2023-01-09', 2, 'Pirkimas', 14.25",
+                        "2, '2023-01-09', 2, 'Pirkimas', 78.95",
+                        "2, '2023-01-09', 2, 'Pirkimas', 12.45",
+                        "2, '2023-01-09', 2, 'Pirkimas', 25.78",
+                        "2, '2023-01-09', 2, 'Pirkimas', 38.74",
+                        "2, '2023-01-10', 2, 'Pirkimas', 14.45",
+                        "2, '2023-01-10', 2, 'Pirkimas', 77.88",
+                        "2, '2023-01-10', 2, 'Pinigų išėmimas bankomate', 100.00",
+                        "2, '2023-01-10', 2, 'Pirkimas', 46.78",
+                        "3, '2023-01-08', 2, 'Pirkimas', 9.25",
+                        "3, '2023-01-08', 2, 'Pirkimas', 19.47",
+                        "3, '2023-01-09', 2, 'Pirkimas', 25.69",
+                        "3, '2023-01-09', 2, 'Pirkimas', 46.36",
+                        "3, '2023-01-09', 2, 'Pirkimas', 78.65",
+                        "3, '2023-01-09', 2, 'Pirkimas', 5.45",
+                        "3, '2023-01-09', 2, 'Pirkimas', 36.58",
+                        "3, '2023-01-09', 2, 'Pirkimas', 74.82",
+                        "3, '2023-01-09', 2, 'Pirkimas', 75.65",
+                        "3, '2023-01-09', 2, 'Pirkimas', 14.45",
+                        "3, '2023-01-09', 2, 'Pirkimas', 5.57",
+                        "3, '2023-01-09', 2, 'Pirkimas', 16.15",
+                        "3, '2023-01-10', 2, 'Pirkimas', 19.45",
+                        "3, '2023-01-10', 2, 'Pirkimas', 25.65",
+                        "3, '2023-01-10', 2, 'Pirkimas', 35.74",
+                        "3, '2023-01-10', 2, 'Pirkimas', 75.39",
+                        "3, '2023-01-10', 2, 'Pirkimas', 41.78",
+                        "3, '2023-01-10', 2, 'Pirkimas', 45.91",
+                        "3, '2023-01-10', 2, 'Pirkimas', 51.73",
+                        "3, '2023-01-10', 2, 'Pirkimas', 36.19",
+                        "3, '2023-01-10', 2, 'Pirkimas', 89.98",
+                        "3, '2023-01-10', 2, 'Pirkimas', 25.75",
+                        "3, '2023-01-11', 2, 'Pirkimas', 36.65",
+                        "3, '2023-01-11', 2, 'Pirkimas', 77.42",
+                        "3, '2023-01-11', 2, 'Pirkimas', 99.76",
+                        "3, '2023-01-11', 2, 'Pirkimas', 9.86",
+
+                    };
+
                     SQLCommand.CommandText = $"CREATE TABLE {SQLite.ClientsTransactions} (" +
                                                             $"TransactionID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                                             $"CardID INTEGER, " +
@@ -210,51 +274,57 @@ namespace Bankomatas.System
                                                             $"TransactionDescr TEXT, " +
                                                             $"TransactionValue DECIMAL(10, 2));";
                     SQLCommand.ExecuteNonQuery();
-                    SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
-                                                            $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
-                                                            $"VALUES (" +
-                                                                    $"1, " +
-                                                                    $"'2023-01-09', " +
-                                                                    $"2, " +
-                                                                    $"'Pinigų išėmimas bankomate', " +
-                                                                    $"100.00);";
-                    SQLCommand.ExecuteNonQuery();
-                    SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
-                                                            $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
-                                                            $"VALUES (" +
-                                                                    $"1, " +
-                                                                    $"'2023-01-09', " +
-                                                                    $"2, " +
-                                                                    $"'Pinigų išėmimas bankomate', " +
-                                                                    $"50.00);";
-                    SQLCommand.ExecuteNonQuery();
-                    SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
-                                                            $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
-                                                            $"VALUES (" +
-                                                                    $"1, " +
-                                                                    $"'2023-01-09', " +
-                                                                    $"2, " +
-                                                                    $"'Išlaidos pirkiniams', " +
-                                                                    $"6345.00);";
-                    SQLCommand.ExecuteNonQuery();
-                    SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
-                                                            $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
-                                                            $"VALUES (" +
-                                                                    $"1, " +
-                                                                    $"'2023-01-09', " +
-                                                                    $"2, " +
-                                                                    $"'Išlaidos pirkiniams', " +
-                                                                    $"25.00);";
-                    SQLCommand.ExecuteNonQuery();
-                    SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
-                                                            $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
-                                                            $"VALUES (" +
-                                                                    $"1, " +
-                                                                    $"'2023-01-09', " +
-                                                                    $"1, " +
-                                                                    $"'Atlyginimas', " +
-                                                                    $"1896.78);";
-                    SQLCommand.ExecuteNonQuery();
+					foreach(string value in SQLCommandsValues)
+					{
+						SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) VALUES ({value});";
+						SQLCommand.ExecuteNonQuery();
+					}
+					
+                    //SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
+                    //                                        $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
+                    //                                        $"VALUES (" +
+                    //                                                $"1, " +
+                    //                                                $"'2023-01-09', " +
+                    //                                                $"2, " +
+                    //                                                $"'Pinigų išėmimas bankomate', " +
+                    //                                                $"100.00);";
+                    //SQLCommand.ExecuteNonQuery();
+                    //SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
+                    //                                        $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
+                    //                                        $"VALUES (" +
+                    //                                                $"1, " +
+                    //                                                $"'2023-01-09', " +
+                    //                                                $"2, " +
+                    //                                                $"'Pinigų išėmimas bankomate', " +
+                    //                                                $"50.00);";
+                    //SQLCommand.ExecuteNonQuery();
+                    //SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
+                    //                                        $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
+                    //                                        $"VALUES (" +
+                    //                                                $"1, " +
+                    //                                                $"'2023-01-09', " +
+                    //                                                $"2, " +
+                    //                                                $"'Išlaidos pirkiniams', " +
+                    //                                                $"6345.00);";
+                    //SQLCommand.ExecuteNonQuery();
+                    //SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
+                    //                                        $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
+                    //                                        $"VALUES (" +
+                    //                                                $"1, " +
+                    //                                                $"'2023-01-09', " +
+                    //                                                $"2, " +
+                    //                                                $"'Išlaidos pirkiniams', " +
+                    //                                                $"25.00);";
+                    //SQLCommand.ExecuteNonQuery();
+                    //SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (" +
+                    //                                        $"CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
+                    //                                        $"VALUES (" +
+                    //                                                $"1, " +
+                    //                                                $"'2023-01-09', " +
+                    //                                                $"1, " +
+                    //                                                $"'Atlyginimas', " +
+                    //                                                $"1896.78);";
+                    //SQLCommand.ExecuteNonQuery();
                 }
             }
         }
