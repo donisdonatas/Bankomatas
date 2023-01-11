@@ -92,10 +92,66 @@ namespace Bankomatas.Classes
             //return isPinValid;
         }
 
-        public decimal GetCardBalance()
+        public void WithdrawMoney()
         {
-            decimal cardBalance = 0;
-            return cardBalance;
+            bool isWithdrawalValid = false;
+            int WithdrawValue = 0;
+            while (!isWithdrawalValid)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Įveskite sumą kurią norite išimti:");
+                Exception err = null;
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    WithdrawValue = int.Parse(Console.ReadLine());
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Blogai įvesta suma. Pakartokite.");
+                    err = ex;
+                }
+                finally
+                {
+                    if(err == null)
+                    {
+                        decimal CurrentBalance = SQLite.GetBalance(CardGuid);
+                        int CountTransactions = SQLite.CountDailyTransactions(SQLite.GetCardID(CardGuid));
+                        if(CountTransactions <= 10)
+                        {
+                            if (CurrentBalance >= (decimal)WithdrawValue)
+                            {
+                                if (WithdrawValue >= 10 && WithdrawValue <= 1000 && WithdrawValue % 10 == 0)
+                                {
+                                    SQLite.CreateWithdrawal(SQLite.GetCardID(CardGuid), WithdrawValue);
+                                    isWithdrawalValid = true;
+                                }
+                                else if (WithdrawValue > 1000)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Maksimali išduodama suma yra 1000Eur.");
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Bankomatas gali išduoti tik apvaliom kupiūrom. Minimali išduodama suma 10Eur.");
+                                }
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Jūsų balansas nepakankamas.");
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Pasiekėte dienos operacijų skaičių");
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -18,13 +18,12 @@ namespace Bankomatas.System
                 {
                     Console.SetCursorPosition(0, Console.CursorTop);
                     ClearCurrentConsoleLine();
-                    Thread.Sleep(50);
+                    Thread.Sleep(100);
                     Console.Write($"{i}%");
                 }
             }
-            Console.WriteLine();
-            Console.WriteLine("Prisijungta prie sąskaitos.");
-            Thread.Sleep(2000);
+            Console.Write(" Prisijungta prie sąskaitos.");
+            Thread.Sleep(1500);
         }
 
         internal static void ClearCurrentConsoleLine()

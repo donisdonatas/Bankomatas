@@ -138,23 +138,57 @@ namespace Bankomatas.System
             using (SQLiteConnection ConnectionToDatabase = CreateConnection())
             using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
             {
-                //Console.WriteLine("Guid: " + guid);
                 SQLiteDataReader SQLiteReader;
-                SQLCommand.CommandText = $"SELECT TransactionDate, TransactionDescr, TransactionValue FROM {ClientsTransactions} " +
+                SQLCommand.CommandText = $"SELECT TransactionDate, TransactionDescr, TransactionValue, TransactionType FROM {ClientsTransactions} " +
                                          $"INNER JOIN {GuidTable} ON {ClientsTransactions}.CardID = {GuidTable}.CardID " +
+                                         $"INNER JOIN {TransactionTypes} ON {ClientsTransactions}.TransactionTypeID = {TransactionTypes}.TransactionTypeID " +
                                          $"WHERE {GuidTable}.GUID = '{guid}' AND {ClientsTransactions}.TransactionTypeID = 2 " +
                                          $"ORDER BY {ClientsTransactions}.TransactionID DESC " +
                                          $"LIMIT {number};";
-                //SQLCommand.CommandText = $"SELECT * FROM {ClientsAccounts} INNER JOIN {GuidTable} ON {ClientsAccounts}.AccountID = {GuidTable}.CardID WHERE {GuidTable}.GUID = '{guid}';";
                 SQLiteReader = SQLCommand.ExecuteReader();
                 
                 while (SQLiteReader.Read())
                 {
-                    string TrDate = Convert.ToDateTime(SQLiteReader[0]).ToString("yyyy.MM.dd");
+                    DateTime TrDate = Convert.ToDateTime(SQLiteReader[0]);
                     string TrDesc = Convert.ToString(SQLiteReader[1]);
                     decimal TrValue = Convert.ToDecimal(SQLiteReader[2]);
-                    Console.WriteLine($"{TrDate} {TrDesc} - {TrValue}Eur");
+                    string TrType = Convert.ToString(SQLiteReader[3]);
+                    Console.WriteLine($"{TrDate.ToString("yyyy.MM.dd")} {TrType}: {TrDesc} - {TrValue}Eur");
                 }
+            }
+        }
+
+        public static void CreateWithdrawal(int cardID, int value)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                string today = DateTime.Today.ToString("yyyy-MM-dd");
+                SQLCommand.CommandText = $"INSERT INTO {ClientsTransactions} (CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) " +
+                                         $"VALUES ({cardID}, '{today}', 2, 'Pinigų išėmimas bankomate', {value});";
+                SQLCommand.ExecuteNonQuery();
+            }
+        }
+
+        public static int GetCardID(string guid)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                SQLCommand.CommandText = $"SELECT CardID FROM {GuidTable} WHERE GUID = '{guid}';";
+                int cardID = Convert.ToInt32(SQLCommand.ExecuteScalar());
+                return cardID;
+            }
+        }
+
+        public static int CountDailyTransactions(int cardID)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                SQLCommand.CommandText = $"SELECT COUNT(*) FROM {ClientsTransactions} WHERE CardID = {cardID} AND TransactionDate = '{DateTime.Today.ToString("yyyy-MM-dd")}';";
+                int CountTransactions = Convert.ToInt32(SQLCommand.ExecuteScalar());
+                return CountTransactions;
             }
         }
     }

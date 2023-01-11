@@ -13,13 +13,14 @@ namespace Bankomatas
 {
     public static class Menu
     {
+        internal static Card card;
         internal static string CardGuid { get; set; }
         public static void PrimaryMenu()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Sveiki atvykę čia Bankomatas.");
             Console.WriteLine("Norėdami atlikti operacijas turite patvirtinti autorizaciją.");
-            Card card = new Card();
+            card = new Card();
             CardGuid = card.CheckCard();
             card.CheckPIN();
         }
@@ -85,29 +86,53 @@ namespace Bankomatas
                 {
                     case 1:
                         decimal Balance = SQLite.GetBalance(CardGuid);
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Dabartinis balansas: {Balance}Eur.");
                         isGoodChoise = true;
                         break;
                     case 2:
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Paskutinės 5 atliktos opracijos:");
                         SQLite.GetLastTransactions(CardGuid, 5);
                         isGoodChoise = true;
                         break;
                     case 3:
-                        Console.WriteLine("Menu choise 3");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Pinigų išėmimas");
+                        card.WithdrawMoney();
                         isGoodChoise = true;
                         break;
                     case 0:
-                        Console.WriteLine("Menu choise Exit");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Viso gero.");
+                        Thread.Sleep(2000);
+                        Environment.Exit(0);
                         isGoodChoise = true;
                         break;
                     default:
-                        //Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"Pasirinkimo klaida.");
                         Console.WriteLine("Bandykite dar kartą.");
                         Thread.Sleep(2000);
                         break;
+                }
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("------------------------------------");
+                Console.WriteLine("Ar norite atlikti sekančią operaciją?");
+                Console.WriteLine("[1] Taip");
+                Console.WriteLine("[2] Ne");
+                Console.ForegroundColor = ConsoleColor.White;
+                int nextOperation = int.Parse(Console.ReadLine());
+                if(nextOperation == 1)
+                {
+                    isGoodChoise = false;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine("Viso gero.");
+                    Thread.Sleep(2000);
+                    Environment.Exit(0);
                 }
             }
         }
