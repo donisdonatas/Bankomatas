@@ -125,6 +125,7 @@ namespace Bankomatas.Classes
                                 if (WithdrawValue >= 10 && WithdrawValue <= 1000 && WithdrawValue % 10 == 0)
                                 {
                                     SQLite.CreateWithdrawal(SQLite.GetCardID(CardGuid), WithdrawValue);
+                                    SQLite.UpdateBalance(SQLite.GetCardID(CardGuid), (decimal)WithdrawValue);
                                     isWithdrawalValid = true;
                                 }
                                 else if (WithdrawValue > 1000)

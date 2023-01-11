@@ -274,9 +274,9 @@ namespace Bankomatas.System
                                                             $"TransactionDescr TEXT, " +
                                                             $"TransactionValue DECIMAL(10, 2));";
                     SQLCommand.ExecuteNonQuery();
-					foreach(string value in SQLCommandsValues)
+					foreach(string valueLine in SQLCommandsValues)
 					{
-						SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) VALUES ({value});";
+						SQLCommand.CommandText = $"INSERT INTO {SQLite.ClientsTransactions} (CardID, TransactionDate, TransactionTypeID, TransactionDescr, TransactionValue) VALUES ({valueLine});";
 						SQLCommand.ExecuteNonQuery();
 					}
                 }

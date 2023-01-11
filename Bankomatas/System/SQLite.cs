@@ -191,5 +191,15 @@ namespace Bankomatas.System
                 return CountTransactions;
             }
         }
+
+        public static void UpdateBalance(int cardID, decimal value)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                SQLCommand.CommandText = $"UPDATE {ClientsAccounts} SET CardBalance = CardBalance - {value} WHERE CardID = {cardID};";
+                SQLCommand.ExecuteNonQuery();
+            }
+        }
     }
 }
