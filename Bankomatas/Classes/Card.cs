@@ -16,28 +16,29 @@ namespace Bankomatas.Classes
         private string _cardGuid;
         public string CardGuid
         {
-            get{ return _cardGuid; } 
-            set { _cardGuid = value; }
+            get => _cardGuid;
+            set => _cardGuid = value;
         }
         private bool isCardValid = false;
         private bool isPinValid = false;
         private string Pin;
         private int LoginAttempts = 0;
-        public bool CheckCard()
+        
+        public string CheckCard()
         {
             do
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Įdėkite kortelę:");
                 Console.ForegroundColor = ConsoleColor.White;
-                string Card = Console.ReadLine();
+                CardGuid = Console.ReadLine();
                 List<string> Guids = SQLite.GetFullColumn(SQLite.GuidTable, "GUID");
                 foreach (string guid in Guids)
                 {
-                    if(Card == guid)
+                    if(CardGuid == guid)
                     {
                         CardGuid = guid;
-                        isCardValid = Card == guid;
+                        isCardValid = CardGuid == guid;
                     }
                 }
                 if(!isCardValid)
@@ -46,10 +47,10 @@ namespace Bankomatas.Classes
                     Console.WriteLine("Įdėta netinkama kortelė.");
                 }
             } while (!isCardValid);
-            return isCardValid;
+            return CardGuid;
         }
 
-        public bool CheckPIN()
+        public void CheckPIN()
         {
             do
             {
@@ -77,6 +78,7 @@ namespace Bankomatas.Classes
                     Console.WriteLine("Blogai įvestas slaptažodis. Bandykite dar kartą.");
                     Console.WriteLine("Liko bandymų: {0}", 3 - LoginAttempts);
                 }
+
             } while(!isPinValid && LoginAttempts < 3);
 
             if(LoginAttempts == 3)
@@ -87,8 +89,13 @@ namespace Bankomatas.Classes
                 Thread.Sleep(3000);
                 Environment.Exit(0);
             }
+            //return isPinValid;
+        }
 
-            return isPinValid;
+        public decimal GetCardBalance()
+        {
+            decimal cardBalance = 0;
+            return cardBalance;
         }
     }
 }

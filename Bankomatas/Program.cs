@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Data.SqlClient;
 using System.Data.SQLite;
+using System.Threading;
 
 namespace Bankomatas
 {
@@ -15,11 +16,7 @@ namespace Bankomatas
         static void Main()
         {
             
-            DefaultDatabase.CreateTransactionsTypesTable();
-            DefaultDatabase.CreateGuidTable();
-            DefaultDatabase.CreateClientsInfoTable();
-            DefaultDatabase.CreateClientsAccountsTable();
-            DefaultDatabase.CreateClientsTransactionsTable();
+            DefaultDatabase.CreateDefaultDatabase();
 
             Console.ForegroundColor = ConsoleColor.Blue;
             List<string> Guids = SQLite.GetFullColumn(SQLite.GuidTable, "GUID");
@@ -28,15 +25,9 @@ namespace Bankomatas
                 Console.WriteLine(guid);
             }
 
-            //SQLiteConnection sqliteConnection;
-            //sqliteConnection = SQLite.CreateConnection();
-            //SQLite.CreateClientsAccountsTable(sqliteConnection);
-            //SQLite.InsertDataToClientsAccountsTable(sqliteConnection);
-            //SQLite.ReadData(sqliteConnection);
-
             Menu.PrimaryMenu();
             Login.LoginAnimation();
-            Menu.LoggedUserMenu();
+            Menu.SecondaryMenu();
 
 
             Console.ReadLine();

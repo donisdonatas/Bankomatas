@@ -88,40 +88,6 @@ namespace Bankomatas.System
             conn.Close();   //Kodėl čia pavyzdyje uždaromas konnectionas? Gal reiktų jį įkelti į Try-Finish bloką
         }
 
-        public static string GetGuid(SQLiteConnection conn)
-        {
-            SQLiteDataReader SQLiteReader;
-            SQLiteCommand sqliteCommand;
-            sqliteCommand = conn.CreateCommand();
-            sqliteCommand.CommandText = $"SELECT GUID FROM {GuidTable} WHERE GUID='d47f53e6-65b6-463e-8fbd-054c17390818';";
-            SQLiteReader = sqliteCommand.ExecuteReader();
-            string GuidString = null;
-            while (SQLiteReader.Read())
-            {
-                GuidString = SQLiteReader.GetString(0);
-            }
-            Console.WriteLine($"GuidString from DB: {GuidString}");
-            conn.Close();
-            return GuidString;
-        }
-
-        public static string GetPin(SQLiteConnection conn)
-        {
-            SQLiteDataReader SQLiteReader;
-            SQLiteCommand sqliteCommand;
-            sqliteCommand = conn.CreateCommand();
-            sqliteCommand.CommandText = $"SELECT CardID FROM {ClientsAccounts} WHERE GUID='0b7fff40-d4b9-4adf-a6f7-18eabdb033d5';";
-            SQLiteReader = sqliteCommand.ExecuteReader();
-            string PinFromDatabase = null;
-            while (SQLiteReader.Read())
-            {
-                PinFromDatabase = SQLiteReader.GetString(0);
-            }
-            Console.WriteLine($"PinFromDatabase from DB: {PinFromDatabase}");
-            conn.Close();
-            return PinFromDatabase;
-        }
-
         public static string GetPin(string guid)
         {
             using (SQLiteConnection ConnectionToDatabase = CreateConnection())
@@ -153,6 +119,42 @@ namespace Bankomatas.System
                     StringsList.Add(SQLiteReader.GetString(0));
                 }
                 return StringsList;
+            }
+        }
+
+        public static decimal GetBalance(string guid)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                SQLCommand.CommandText = $"SELECT SUM(CardBalance) FROM {ClientsAccounts} INNER JOIN {GuidTable} ON {ClientsAccounts}.AccountID = {GuidTable}.CardID WHERE {GuidTable}.GUID = '{guid}';";
+                decimal Balance = Convert.ToDecimal(SQLCommand.ExecuteScalar());
+                return Balance;
+            }
+        }
+
+        public static void GetLastTransactions(string guid, int number)
+        {
+            using (SQLiteConnection ConnectionToDatabase = CreateConnection())
+            using (SQLiteCommand SQLCommand = ConnectionToDatabase.CreateCommand())
+            {
+                //Console.WriteLine("Guid: " + guid);
+                SQLiteDataReader SQLiteReader;
+                SQLCommand.CommandText = $"SELECT TransactionDate, TransactionDescr, TransactionValue FROM {ClientsTransactions} " +
+                                         $"INNER JOIN {GuidTable} ON {ClientsTransactions}.CardID = {GuidTable}.CardID " +
+                                         $"WHERE {GuidTable}.GUID = '{guid}' AND {ClientsTransactions}.TransactionTypeID = 2 " +
+                                         $"ORDER BY {ClientsTransactions}.TransactionID DESC " +
+                                         $"LIMIT {number};";
+                //SQLCommand.CommandText = $"SELECT * FROM {ClientsAccounts} INNER JOIN {GuidTable} ON {ClientsAccounts}.AccountID = {GuidTable}.CardID WHERE {GuidTable}.GUID = '{guid}';";
+                SQLiteReader = SQLCommand.ExecuteReader();
+                
+                while (SQLiteReader.Read())
+                {
+                    string TrDate = Convert.ToDateTime(SQLiteReader[0]).ToString("yyyy.MM.dd");
+                    string TrDesc = Convert.ToString(SQLiteReader[1]);
+                    decimal TrValue = Convert.ToDecimal(SQLiteReader[2]);
+                    Console.WriteLine($"{TrDate} {TrDesc} - {TrValue}Eur");
+                }
             }
         }
     }
