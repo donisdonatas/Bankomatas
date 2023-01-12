@@ -1,13 +1,6 @@
 ﻿using Bankomatas.System;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Data.SqlClient;
-using System.Data.SQLite;
-using System.Threading;
 
 namespace Bankomatas
 {
@@ -15,7 +8,6 @@ namespace Bankomatas
     {
         static void Main()
         {
-            
             DefaultDatabase.CreateDefaultDatabase();
 
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -24,13 +16,9 @@ namespace Bankomatas
             {
                 Console.WriteLine(guid);
             }
-
             Menu.PrimaryMenu();
             Login.LoginAnimation();
             Menu.SecondaryMenu();
-
-
-            Console.ReadLine();
         }
     }
 }

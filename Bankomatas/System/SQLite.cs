@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SQLite;
-using System.Security;
 
 namespace Bankomatas.System
 {
@@ -29,63 +25,7 @@ namespace Bankomatas.System
             {
                 Console.WriteLine($"There was error connecting to database. Error code: {ex.Message}");
             }
-            finally
-            {
-                //SQLiteConn.Close();
-            }
-
             return SQLiteConn;
-        }
-
-        public static void CreateGuidTable(SQLiteConnection conn)
-        {
-            SQLiteCommand SQLiteComm;
-            string SQLiteCreate = $"CREATE TABLE {GuidTableName}(GUID CHARACTER(36));";
-            SQLiteComm = conn.CreateCommand();
-            SQLiteComm.CommandText = SQLiteCreate;
-            SQLiteComm.ExecuteNonQuery();
-        }
-
-        public static void CreateClientsAccountsTable(SQLiteConnection conn)
-        {
-            SQLiteCommand SQLiteComm;
-            string SQLiteCreate = $"CREATE TABLE {ClientsAccounts}(ClientID INTEGER PRIMARY KEY AUTOINCREMENT, GUID CHARACTER(36), CardID CHARACTER(4), CardBalance DECIMAL(10, 2));";
-            SQLiteComm = conn.CreateCommand();
-            SQLiteComm.CommandText = SQLiteCreate;
-            SQLiteComm.ExecuteNonQuery();
-        }
-
-        public static void InsertDataToClientsAccountsTable(SQLiteConnection connection)
-        {
-            SQLiteCommand SQLiteComm;
-            SQLiteComm = connection.CreateCommand();
-            SQLiteComm.CommandText = $"INSERT INTO {ClientsAccounts}(GUID, CardID, CardBalance) VALUES ('{NewGuidString}', 1234, 5412.54)";
-            SQLiteComm.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        public static void InsertData(SQLiteConnection conn)
-        {
-            SQLiteCommand SQLiteComm;
-            SQLiteComm = conn.CreateCommand();
-            SQLiteComm.CommandText = $"INSERT INTO {GuidTableName}(GUID) VALUES ('{NewGuidString}')";
-            SQLiteComm.ExecuteNonQuery();
-        }
-
-        public static void ReadData(SQLiteConnection conn)
-        {
-            SQLiteDataReader SQLiteReader;
-            SQLiteCommand SQLiteComm;
-            SQLiteComm = conn.CreateCommand();
-            SQLiteComm.CommandText = $"SELECT * FROM {GuidTableName};";
-            SQLiteReader = SQLiteComm.ExecuteReader();
-            while(SQLiteReader.Read())
-            {
-                string ReadingString = SQLiteReader.GetString(0);
-                Console.WriteLine(ReadingString);
-            }
-
-            conn.Close();   //Kodėl čia pavyzdyje uždaromas konnectionas? Gal reiktų jį įkelti į Try-Finish bloką
         }
 
         public static string GetPin(string guid)
@@ -151,9 +91,9 @@ namespace Bankomatas.System
                 {
                     DateTime TrDate = Convert.ToDateTime(SQLiteReader[0]);
                     string TrDesc = Convert.ToString(SQLiteReader[1]);
-                    decimal TrValue = Convert.ToDecimal(SQLiteReader[2]);
+                    string TrValue = String.Format("{0:0.00}", Convert.ToDecimal(SQLiteReader[2]));
                     string TrType = Convert.ToString(SQLiteReader[3]);
-                    Console.WriteLine($"{TrDate.ToString("yyyy.MM.dd")} {TrType}: {TrDesc} - {TrValue}Eur");
+                    Console.WriteLine($"{TrDate.ToString("yyyy.MM.dd")} {TrType}: {TrDesc} - {TrValue} Eur");
                 }
             }
         }

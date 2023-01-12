@@ -1,13 +1,7 @@
 ﻿using Bankomatas.Classes;
 using Bankomatas.System;
 using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Bankomatas
 {
@@ -49,7 +43,6 @@ namespace Bankomatas
                 }
                 catch(FormatException ex)
                 {
-                    //Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Pasirinkimo klaida. Klaidos pranešimas: {ex.Message}");
                     Console.WriteLine("Bandykite dar kartą.");
@@ -58,7 +51,6 @@ namespace Bankomatas
                 }
                 catch(Exception ex)
                 {
-                    //Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Pasirinkimo klaida. Klaidos pranešimas: {ex.Message}");
                     Console.WriteLine("Bandykite dar kartą.");
@@ -79,7 +71,6 @@ namespace Bankomatas
         public static void SecondaryMenu()
         {
             bool isGoodChoise = false;
-            //Card card = new Card();
             while (!isGoodChoise)
             {
                 switch (LoggedUserMenu())
@@ -87,23 +78,29 @@ namespace Bankomatas
                     case 1:
                         decimal Balance = SQLite.GetBalance(CardGuid);
                         Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("------------------------------------");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
                         Console.WriteLine($"Dabartinis balansas: {Balance}Eur.");
                         isGoodChoise = true;
                         break;
                     case 2:
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Paskutinės 5 atliktos opracijos:");
+                        Console.WriteLine("------------------------------------");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
                         SQLite.GetLastTransactions(CardGuid, 5);
                         isGoodChoise = true;
                         break;
                     case 3:
                         Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("------------------------------------");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
                         Console.WriteLine("Pinigų išėmimas");
                         card.WithdrawMoney();
                         isGoodChoise = true;
                         break;
                     case 0:
-                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("Viso gero.");
                         Thread.Sleep(2000);
                         Environment.Exit(0);
@@ -122,8 +119,20 @@ namespace Bankomatas
                 Console.WriteLine("[1] Taip");
                 Console.WriteLine("[2] Ne");
                 Console.ForegroundColor = ConsoleColor.White;
-                int nextOperation = int.Parse(Console.ReadLine());
-                if(nextOperation == 1)
+                Exception err = null;
+                int nextOperation = 1;
+                try
+                {
+                    nextOperation = int.Parse(Console.ReadLine());
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Blogai įvestas pasirinkimas.");
+                    err = ex;
+                }
+
+                if(err == null && nextOperation == 1)
                 {
                     isGoodChoise = false;
                 }

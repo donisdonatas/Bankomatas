@@ -1,13 +1,7 @@
 ﻿using Bankomatas.System;
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Bankomatas.Classes
 {
@@ -57,15 +51,12 @@ namespace Bankomatas.Classes
                 Console.ForegroundColor = ConsoleColor.Blue;
                 string getEncodedPinFromSQL = SQLite.GetPin(CardGuid);
                 string pin = Encode.DecodedToString(getEncodedPinFromSQL);
-                Console.WriteLine(getEncodedPinFromSQL + " / " + pin);
+                Console.WriteLine(pin);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Įveskite keturių skaitmenų PIN kodą:");
                 Pin = PIN.InputPIN();
-                Console.WriteLine("Pin: " + Pin);
-                string EncodedPin = Encode.EncodeToString(Pin);
-                Console.WriteLine("EncodedPin: " + EncodedPin);
-                string DecodedPin = Encode.DecodedToString(EncodedPin);
-                Console.WriteLine("DecodedPin: " + DecodedPin);
+                //string EncodedPin = Encode.EncodeToString(Pin);
+                //string DecodedPin = Encode.DecodedToString(EncodedPin);
 
                 if (Pin == pin)
                 {
@@ -89,7 +80,6 @@ namespace Bankomatas.Classes
                 Thread.Sleep(3000);
                 Environment.Exit(0);
             }
-            //return isPinValid;
         }
 
         public void WithdrawMoney()
